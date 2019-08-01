@@ -4,11 +4,10 @@ import BookItem from './BookItem'
 
 const BooksList = (props) => {
   const {books} = props
+
   return (
     <ol className="books-grid">
-      book.map((book) => ({
-        <li><BookItem key={books.id} title={books.title} author={books.authors[0]} shelf={books.shelf} cover={books.imageLinks.thumbnail} /></li>
-      }))
+      {books.map((book) => <BookItem key={book.id} title={book.title} author={book.authors[0]} shelf={book.shelf} cover={book.imageLinks.thumbnail} /> )}
     </ol>
   )
 }
