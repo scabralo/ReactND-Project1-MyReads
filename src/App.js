@@ -25,6 +25,7 @@ class BooksApp extends React.Component {
   }
 
   render() {
+    const {books, shelves} = this.state
     return (
       <div className="app">
 
