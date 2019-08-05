@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const BookItem = props => {
-  const {cover, shelf, title, author} = props
+  const {id, cover, shelf, title, author, onShelfChange} = props
   return (
     <li>
       <div className="book">
@@ -11,7 +11,7 @@ const BookItem = props => {
           <img alt={''} src={cover} style={{display:'inherit'}} />
           </div>
           <div className="book-shelf-changer">
-            <select value={shelf} onChange={(event)=>{console.log('onChange: ',event.target.value)}}>
+            <select value={shelf} onChange={(event)=> onShelfChange(id, event.target.value) }>
               <option value="move" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>
@@ -32,6 +32,6 @@ BookItem.propTypes = {
   shelf: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
-  //onShelfChanged: PropTypes.func.isRequired
+  onShelfChange: PropTypes.func.isRequired
 }
 export default BookItem
