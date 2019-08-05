@@ -4,6 +4,9 @@ import {Route} from 'react-router-dom'
 import './App.css'
 import {Link} from 'react-router-dom'
 import BookShelf from './BooksShelf'
+import SearchResults from './SearchResults'
+import SearchBar from './SearchBar';
+import { thisExpression } from '@babel/types';
 
 class BooksApp extends React.Component {
   state = {
@@ -12,7 +15,9 @@ class BooksApp extends React.Component {
       {id:'currentlyReading', title: 'Currently Reading'},
       {id:'wantToRead', title:'Want To Read'},
       {id:'read', title:'Read'}
-    ]
+    ],
+    query: '',
+    searchResults: []
   }
 
   componentDidMount() {
@@ -38,8 +43,26 @@ class BooksApp extends React.Component {
     }))
   }
 
+  onChangeQuery = (input) => {
+    console.log('input', input)
+    this.setState(() => ({
+      query: input
+    }))
+    this.getResults()
+  }
+
+  getResults = () => {
+    BooksAPI.search(this.state.query, 10)
+      .then((result) => {
+        // console.log('result', result)
+        this.setState(() => ({
+          searchResults: result
+        }))
+      })
+  }
+
   render() {
-    const {books, shelves} = this.state
+    const {books, shelves, query, searchResults} = this.state
     return (
       <div className="app">
 
@@ -62,24 +85,8 @@ class BooksApp extends React.Component {
         )} />
         <Route exact path='/search' render={({ history })=>(
           <div className="search-books">
-            <div className="search-books-bar">
-              <Link className='close-search' to='/' >Close</Link>
-              <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input type="text" placeholder="Search by title or author"/>
-
-              </div>
-            </div>
-            <div className="search-books-results">
-              <ol className="books-grid"></ol>
-            </div>
+            <SearchBar query={query} onInputChanged={this.onChangeQuery} />
+            <SearchResults books={searchResults} onShelfChange={this.changeShelf} />
           </div>
         )} />
         
