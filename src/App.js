@@ -61,14 +61,19 @@ class BooksApp extends React.Component {
     this.setState(() => ({
       query: input
     }))
-    this.getResults()
+    this.getResults(input)
   }
 
-  getResults = () => {
-    BooksAPI.search(this.state.query, 10)
+  getResults = (input) => {
+    input = input ? input : ' ' 
+    BooksAPI.search(input, 20)
       .then((result) => {
+        result && result.length > 0 ? 
         this.setState(() => ({
           searchResults: result
+        })) : 
+        this.setState(() => ({
+          searchResults: []
         }))
       })
   }

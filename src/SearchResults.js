@@ -18,5 +18,13 @@ const SearchResults = props => {
     </div>
   )
 }
+//<SearchResults books={searchResults} currentBooks={this.state.books}  onShelfChange={this.changeShelf} addToShelves={this.addToShelves} />
+
+SearchResults.propTypes = {
+  books: PropTypes.array.isRequired,
+  currentBooks: PropTypes.array.isRequired,
+  onShelfChange: PropTypes.func.isRequired,
+  addToShelves: PropTypes.func.isRequired
+}
 
 export default SearchResults
