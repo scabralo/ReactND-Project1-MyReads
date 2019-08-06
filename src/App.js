@@ -6,7 +6,6 @@ import {Link} from 'react-router-dom'
 import BookShelf from './BooksShelf'
 import SearchResults from './SearchResults'
 import SearchBar from './SearchBar';
-import { thisExpression } from '@babel/types';
 
 class BooksApp extends React.Component {
   state = {
@@ -43,8 +42,22 @@ class BooksApp extends React.Component {
     }))
   }
 
+  addToShelves = (bookId, shelf) => {
+    BooksAPI.get(bookId)
+      .then((result) => {
+        result.shelf = shelf
+        console.log(result)
+        this.setState((prevState) => ({
+          books:prevState.books.concat([result])
+        }))
+        return result
+      }).then((secondResult) => {
+        console.log('secondResult',secondResult)
+        BooksAPI.update(secondResult, secondResult.shelf)
+      })
+  }
+
   onChangeQuery = (input) => {
-    console.log('input', input)
     this.setState(() => ({
       query: input
     }))
@@ -54,7 +67,6 @@ class BooksApp extends React.Component {
   getResults = () => {
     BooksAPI.search(this.state.query, 10)
       .then((result) => {
-        // console.log('result', result)
         this.setState(() => ({
           searchResults: result
         }))
@@ -86,7 +98,7 @@ class BooksApp extends React.Component {
         <Route exact path='/search' render={({ history })=>(
           <div className="search-books">
             <SearchBar query={query} onInputChanged={this.onChangeQuery} />
-            <SearchResults books={searchResults} onShelfChange={this.changeShelf} />
+            <SearchResults books={searchResults} currentBooks={this.state.books}  onShelfChange={this.changeShelf} addToShelves={this.addToShelves} />
           </div>
         )} />
         
